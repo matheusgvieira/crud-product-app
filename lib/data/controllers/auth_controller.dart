@@ -1,24 +1,29 @@
-import 'package:crud_product_app/data/repositories/auth_repository.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
   var isLoading = true.obs;
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-  Future<void> login(String email, String password) async {
-    try {
-      isLoading.value = true;
-      await AuthRepository().login(email, password);
-    } finally {
-      isLoading.value = false;
-    }
+  Future<void> login(String token) async {
+    await secureStorage.write(key: '@products/jwt_token', value: token);
   }
 
   Future<void> logout() async {
-    try {
-      isLoading.value = true;
-      await AuthRepository().logout();
-    } finally {
-      isLoading.value = false;
+    await secureStorage.delete(key: '@products/jwt_token');
+  }
+
+  Future<String> getToken() async {
+    final token = await secureStorage.read(key: '@products/jwt_token') ?? '';
+    return token;
+  }
+
+  Future<bool> isLoggedIn() async {
+    final token = await secureStorage.read(key: '@products/jwt_token');
+
+    if (token == null) {
+      return false;
     }
+    return true;
   }
 }
