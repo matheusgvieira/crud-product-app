@@ -15,3 +15,34 @@ class Product {
     );
   }
 }
+
+class ProductCreate {
+  final String name;
+  final double price;
+
+  ProductCreate({required this.name, required this.price});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'price': price,
+    };
+  }
+}
+
+class ProductEdit {
+  final String id_product;
+  final String name;
+  final double price;
+
+  ProductEdit({required this.name, required this.price, required this.id_product});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'price': price,
+    };
+  }
+}
+
+

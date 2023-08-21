@@ -23,10 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = emailController.text;
     String password = passwordController.text;
 
-    print('Email: $email, Password: $password');
     try {
       String token = await AuthRepository().login(email, password);
-      print('Token: $token');
       AuthController().login(token);
       Navigator.pushNamed(context, '/productList');
     } catch (e) {

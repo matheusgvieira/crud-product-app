@@ -9,16 +9,25 @@ import 'package:get/get.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final bool isLoggedIn = await AuthController().isLoggedIn();
-
   runApp(GetMaterialApp(
-    initialRoute: isLoggedIn ? '/productList' : '/login',
     title: 'CRUD Product App',
     getPages: [
       GetPage(name: '/login', page: () => LoginScreen()),
       GetPage(name: '/productList', page: () => ProductListScreen())
     ],
     initialBinding: ProductControllerBinding(), // Bind controllers
+    home: FutureBuilder<bool?>(
+      future: AuthController().isLoggedIn(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final bool isLoggedIn = snapshot.data!;
+
+          return isLoggedIn ? ProductListScreen() : LoginScreen();
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    ),
   ));
 }
 
